@@ -1,7 +1,14 @@
+const bodyParser = require('body-parser');
 const express = require('express');
 const path = require('path');
 
 const app = express();
+
+//utilizar o bodyParser (formulario)
+app.use(bodyParser.json());
+app.use(bodyParser.urlencoded({
+    extended: true
+}));
 
 //utilizar o express com ejs
 app.engine('html', require('ejs').renderFile);
@@ -11,6 +18,11 @@ app.set('views', path.join(__dirname, '/views'));
 
 
 var tarefas = ['Estudar', 'Dormir', 'Jogar']
+
+app.post('/', (req,res) => {
+    tarefas.push(req.body.tarefa);
+    res.render('index', {tarefasList: tarefas});
+})
 
 app.get('/', (req,res) => {
     res.render('index', {tarefasList: tarefas});
